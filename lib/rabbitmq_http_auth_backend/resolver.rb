@@ -24,12 +24,12 @@ module RabbitMQHttpAuthBackend
     private
 
     def generate_response!
-      if resolver.is_a?(Proc)
+      if resolver.is_a?(Proc) && resolver.arity.zero?
         runtime = Runtime.new(params)
         runtime.instance_eval(&resolver)
         build_response(runtime)
       elsif resolver.respond_to?(:call)
-        resolver.call(params)
+        Array(resolver.call(params))
       else
         raise(NonCallableResolverError)
       end

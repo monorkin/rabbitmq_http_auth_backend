@@ -31,8 +31,8 @@ end
 RailsApp::Application.routes.draw do
   mount RabbitMQHttpAuthBackend.app => '/rabbitmq/auth'
   # mount RabbitMQHttpAuthBackend.app, at: '/rabbitmq/auth'
-  #       ^^^^^^^^      ^^^^^^^^^^^^^^^^
-  #       Rack app      mount point
+  #       ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^
+  #       Rack app                         mount point
 end
 
 ## VERSIONING
