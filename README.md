@@ -333,7 +333,9 @@ https://github.com/monorkin/rabbitmq_http_auth_backend/.
 
 ## License
 
-This software is licensed under the MIT license.
+This software is licensed under the MIT license. A copy of the license
+can be found in the [LICENSE.txt file](/LICENSE.txt) included with this
+software.
 
 **TL;DR** this software comes with absolutely no warranty of any kind.
 You are free to redistribute and modify the software as long as the original
