@@ -1,0 +1,16 @@
+# Cache files
+/.bundle/
+
+# Temporary files
+/tmp/
+
+# Test results
+/coverage/
+/spec/reports/
+.rspec_status
+
+# OS files
+.DS_Store
+
+# Editor files
+/tags
