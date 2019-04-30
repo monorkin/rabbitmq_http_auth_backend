@@ -23,11 +23,11 @@ endpoints and respond with correctly formated responses.
 
 ## Usage
 
-1. [Mounting the endpoint]()
-2. [Configuration]()
-3. [Resolvers]()
-4. [Versioning]()
-5. [Default configuration]()
+1. [Mounting the endpoint](#mounting-the-endpoint)
+2. [Configuration](#configuration)
+3. [Resolvers](#resolvers)
+4. [Versioning](#versioning)
+5. [Default configuration](#default-configuration)
 
 ### Mounting the endpoint
 
