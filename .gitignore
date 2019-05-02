@@ -1,3 +1,6 @@
+# Build artefacts
+*.gem
+
 # Cache files
 /.bundle/
 
