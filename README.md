@@ -3,6 +3,8 @@
 Mountable Rack application that implements a configurable API for RabbitMQ's
 [rabbitmq-auth-backend-http](https://github.com/rabbitmq/rabbitmq-auth-backend-http).
 
+[![Gem Version](https://badge.fury.io/rb/rabbitmq_http_auth_backend.svg)](https://badge.fury.io/rb/rabbitmq_http_auth_backend)
+
 ## Purpose
 
 RabbitMQ comes bundled with the [rabbitmq-auth-backend-http](https://github.com/rabbitmq/rabbitmq-auth-backend-http)
@@ -42,7 +44,7 @@ For **Rails** applications, add the following line to your `routes.rb` file:
 ```ruby
 # /config/routes.rb
 Rails.application.routes.draw do
-  mount RabbitMQHttpAuthBackend.app => '/rabbitmq/auth'
+  mount RabbitMQHttpAuthBackend.app => '/rabbitmq/auth', as: 'rmq_auth_api'
 end
 ```
 
@@ -309,7 +311,7 @@ Mount the application:
 ```ruby
 # /config/routes.rb
 Rails.application.routes.draw do
-  mount RabbitMQHttpAuthBackend.app => '/rabbitmq/auth'
+  mount RabbitMQHttpAuthBackend.app => '/rabbitmq/auth', as: 'rmq_auth_api'
 end
 ```
 
