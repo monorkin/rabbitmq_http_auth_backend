@@ -315,6 +315,13 @@ Rails.application.routes.draw do
 end
 ```
 
+You are done!
+
+```
+bash-4.4$ curl localhost:3000/rabbitmq/auth/user && echo
+deny
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies.
