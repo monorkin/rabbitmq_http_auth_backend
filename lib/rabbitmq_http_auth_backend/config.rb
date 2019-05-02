@@ -28,6 +28,10 @@ module RabbitMQHttpAuthBackend
       @configuration ||= { default_configuration_key => default_configuration }
     end
 
+    def self.reset!
+      @configuration = { default_configuration_key => default_configuration }
+    end
+
     def self.versions
       configuration.keys
     end
@@ -41,6 +45,7 @@ module RabbitMQHttpAuthBackend
     end
 
     def self.version(version)
+      return unless versions.include?(version)
       new(version)
     end
 

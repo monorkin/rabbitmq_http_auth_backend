@@ -19,7 +19,7 @@ module RabbitMQHttpAuthBackend
               r.send(config.http_method) do
                 result =
                   RabbitMQHttpAuthBackend::Resolver
-                  .call(config.fetch(resource, :resolver))
+                  .call(r.params, config.fetch(resource, :resolver))
                 ResponseFormatter.call(result)
               end
             end

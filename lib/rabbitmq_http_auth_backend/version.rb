@@ -1,4 +1,4 @@
-#
+# frozen_string_literal: true
 
 module RabbitMQHttpAuthBackend
   module Version
@@ -13,5 +13,5 @@ module RabbitMQHttpAuthBackend
     end
   end
 
-  VERSION = Version
+  VERSION = Version.to_s
 end

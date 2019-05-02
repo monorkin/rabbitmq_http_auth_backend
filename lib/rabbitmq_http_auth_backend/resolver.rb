@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RabbitMQHttpAuthBackend
-  class Resolver
+  class Resolver < Service
     class Error < RabbitMQHttpAuthBackend::Error; end
     class NoResolverError < Error; end
     class NonCallableResolverError < Error; end
