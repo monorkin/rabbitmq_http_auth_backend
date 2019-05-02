@@ -12,10 +12,10 @@ module RabbitMQHttpAuthBackend
       # HTTP
       http_method: :get,
       # Paths
-      user_path: 'user',
-      vhost_path: 'vhost',
-      resource_path: 'resource',
-      topic_path: 'topic',
+      user_path: '/user',
+      vhost_path: '/vhost',
+      resource_path: '/resource',
+      topic_path: '/topic',
       # Resolvers
       user_resolver: DENY_PROC,
       vhost_resolver: DENY_PROC,
@@ -46,6 +46,7 @@ module RabbitMQHttpAuthBackend
 
     def self.version(version)
       return unless versions.include?(version)
+
       new(version)
     end
 
@@ -60,7 +61,7 @@ module RabbitMQHttpAuthBackend
     end
 
     def user_path
-      data[:user_path]
+      sanitize_path(data[:user_path])
     end
 
     def user_resolver
@@ -68,7 +69,7 @@ module RabbitMQHttpAuthBackend
     end
 
     def vhost_path
-      data[:vhost_path]
+      sanitize_path(data[:vhost_path])
     end
 
     def vhost_resolver
@@ -76,7 +77,7 @@ module RabbitMQHttpAuthBackend
     end
 
     def resource_path
-      data[:resource_path]
+      sanitize_path(data[:resource_path])
     end
 
     def resource_resolver
@@ -84,7 +85,7 @@ module RabbitMQHttpAuthBackend
     end
 
     def topic_path
-      data[:topic_path]
+      sanitize_path(data[:topic_path])
     end
 
     def topic_resolver
@@ -92,7 +93,9 @@ module RabbitMQHttpAuthBackend
     end
 
     def fetch(resource, element)
-      data["#{resource}_#{element}".to_sym]
+      method = "#{resource}_#{element}".to_sym
+      return nil unless respond_to?(method)
+      public_send(method)
     end
 
     private
@@ -103,6 +106,10 @@ module RabbitMQHttpAuthBackend
         cfg = self.class.configuration[version] || {}
         defaults.merge(cfg).freeze
       end
+    end
+
+    def sanitize_path(path)
+      path.gsub(%r{^/}, '')
     end
   end
 end
