@@ -50,4 +50,5 @@ module RabbitMQHttpAuthBackend
   end
 end
 
+require 'rabbitmq_http_auth_backend/basic_resolver'
 require 'rabbitmq_http_auth_backend/resolver/runtime'

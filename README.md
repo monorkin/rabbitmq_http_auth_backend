@@ -123,7 +123,7 @@ RabbitMQHttpAuthBackend.configure! do
     path '/anvandare'
     resolver(lambda do |params|
       if params['username'] == 'admin'
-        return :allow
+        return :allow, [:admin, :moderator]
       end
 
       :deny
@@ -138,7 +138,11 @@ end
 class TopicsResolver
   def self.call(params)
     if params['username'] == 'admin'
-      return :allow, ['admin', 'manager']
+      return :allow
+    end
+
+    if params['permission'] == 'read' && params['name'] == 'messages'
+      return :allow
     end
 
     :deny
@@ -146,11 +150,70 @@ class TopicsResolver
 end
 ```
 
-A "native" configuration DSL is also provided. The DSL provides utility methods
-such as `username`, `password`, `vhost`, `resource`, `name`, `permission`, `ip`
-and `routing_key`. Any utility methods `allow!` and `deny!` can be used to set
-the return value (they don't have to be the return value).
-Just note that they don't stop execution!
+Most commonly used methods related to resolvers are extracted to the
+`BasicResolver` class. Any class inheriting from it becomes a callable object
+on the class and instance level. The user is expected to implement the `#call`
+method.
+
+The following methods are available within a class inheriting from
+`BasicResolver`:
+
+| Method        | Description                                                  |
+|:--------------|:-------------------------------------------------------------|
+| `username`    | Returns the user's username                                  |
+| `password`    | Returns the user's password                                  |
+| `name`        | Returns the name of the resource                             |
+| `queue?`      | Returns true if the queried resource is a queue              |
+| `exchange?`   | Returns true if the queried resource is an exchange          |
+| `topic?`      | Returns true if the queried resource is a topic              |
+| `resource`    | Returns the resource type (as a String, e.g. `'exchange'`)   |
+| `read?`       | Returns true if the queried permission is read               |
+| `write?`      | Returns true if the queried permission is write              |
+| `configure?`  | Returns true if the queried permission is write              |
+| `permission`  | Returns the requested permission (as a String, e.g. `'read'`)|
+| `routing_key` | Returns the queried routing key                              |
+| `vhost`       | Returns the queried vhost                                    |
+| `ip`          | Returns the IP address of the client querying                |
+
+The following is the same as the `TopicsResolver` from the previous example, but
+rewritten using `BasicResolver`:
+
+```ruby
+class TopicsResolver < RabbitMQHttpAuthBackend::BasicResolver
+  def call
+    return :allow if username == 'admin'
+    return :allow if name == 'messages' && read?
+    :deny
+  end
+end
+
+# This makes `TopicsResolver` a callable object on the class level
+# > TopicsResolver.call(params)
+# And it's callable on the instance level
+# > TopicsResolver.new(params).call
+```
+
+A "native" configuration DSL is also provided. The DSL provides the same utility
+methods as `BasicResolver` as well as `allow!`, `deny!`, `tags`, `allowed?` and
+`denised?` which can be used to set the result or to query it - note that they
+don't stop execution!
+
+```ruby
+# /config/initializers/rabbitmq_http_auth_backend.rb
+RabbitMQHttpAuthBackend.configure! do
+  http_method :post
+
+  topic do
+    resolver do
+      if username == 'admin'
+        allow! ['admin', 'manager']
+      else
+        deny!
+      end
+    end
+  end
+end
+```
 
 Not all methods return usable values for all resources. Here's a list:
 * user
@@ -173,23 +236,6 @@ Not all methods return usable values for all resources. Here's a list:
   - `name`
   - `permission` (can return `:configure`, `:read` or `:write`)
   - `routing_key` (of the published message if the permission is `:write`, else of the queue binding)
-
-```ruby
-# /config/initializers/rabbitmq_http_auth_backend.rb
-RabbitMQHttpAuthBackend.configure! do
-  http_method :post
-
-  topic do
-    resolver do
-      if username == 'admin'
-        allow! ['admin', 'manager']
-      else
-        deny!
-      end
-    end
-  end
-end
-```
 
 ### Versioning
 
