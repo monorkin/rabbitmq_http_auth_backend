@@ -23,6 +23,20 @@ This library implements all of this as a mountable Rack application. Meaning,
 after minimal configuration your application can implement the four required
 endpoints and respond with correctly formated responses.
 
+## Index
+
+1. [Usage](#usage)
+    1. [Mounting the endpoint](#mounting-the-endpoint)
+    2. [Configuration](#configuration)
+    3. [Resolvers](#resolvers)
+    4. [Versioning](#versioning)
+    5. [Default configuration](#default-configuration)
+2. [Installation](#installation)
+3. [FAQ](#faq)
+4. [Development](#development)
+5. [Contributing](#contributing)
+6. [License](#license)
+
 ## Usage
 
 1. [Mounting the endpoint](#mounting-the-endpoint)
@@ -367,6 +381,110 @@ You are done!
 bash-4.4$ curl localhost:3000/rabbitmq/auth/user && echo
 deny
 ```
+
+## FAQ
+
+<details>
+  <summary>You use a version in your installation example. Do I have to use a version?</summary>
+  <p>
+    You don't have to, but I would advise you do.
+    Editing the default configuration might cause you problems in the future
+    when you would like to have a clean slate.
+  </p>
+</details>
+
+<details>
+  <summary>Why does the "native" DSL exist?</summary>
+  <p>
+    To provide a simple configuration language to accomplish basic tasks. I
+    would advise you to use `BasicResolver` or a custom resolver callable object
+    for anything other than the most basic use case e.g. check a username or IP.
+  </p>
+</details>
+
+<details>
+  <summary>Can my path be nested? E.g. `/foo/bar/baz/cux`?</summary>
+  <p>Yes they can.</p>
+</details>
+
+<details>
+  <summary>Can my path contain arguments? E.g. `/foo/:name/bar`?</summary>
+  <p>At the moment, no.</p>
+</details>
+
+<details>
+  <summary>Does this library handle caching for me?</summary>
+  <p>
+    No. This feature was removed from the original implementation of this
+    library.
+  </p>
+  <p>
+    Caching is a tricky topic. It's hard to get right. I couldn't find an
+    expressive enough interface for handling cache invalidation that would
+    satisfy my needs or be flexible enough to accommodate the use cases I think
+    are common. Therefore I decided against implementing caching within this
+    library.
+  </p>
+  <p>
+    I recommend that you implement your custom caching and invalidation logic
+    in a custom resolver.
+  </p>
+  <p>
+    Also, use the <a href="https://github.com/rabbitmq/rabbitmq-auth-backend-cache">rabbitmq-auth-backend-cache</a> plugin.
+    It provides time based client-side caching and comes standard with RabbitMQ 3.7+
+  </p>
+  <p>
+    Here is an example of a fully configured HTTP auth backend plugin in
+    conjunction with the caching plugin:
+  </p>
+  <pre>
+    auth_backends.1 = internal
+    auth_backends.2 = cache
+    auth_cache.cached_backend = http
+    auth_http.http_method = get
+    auth_http.user_path = http://localhost:3000/rabbitmq/auth/user
+    auth_http.vhost_path = http://localhost:3000/rabbitmq/auth/vhost
+    auth_http.resource_path = http://localhost:3000/rabbitmq/auth/resource
+    auth_http.topic_path = http://localhost:3000/rabbitmq/auth/topic
+  </pre>
+</details>
+
+<details>
+  <summary>How do you use Rabbit's HTTP backend?</summary>
+  <p>
+    Follow the installation instructions in this guide to setup your Rack
+    (Rails/Roda/Sinatra/...) application as an HTTP auth backend. Then add
+    the following to your `rabbitmq.conf`, located within `/etc/rabbitmq`
+    (if it's not there, create it).
+  </p>
+  <pre>
+    auth_backends.1 = internal
+    auth_backends.2 = http
+    auth_http.http_method = get
+    auth_http.user_path = http://localhost:3000/rabbitmq/auth/user
+    auth_http.vhost_path = http://localhost:3000/rabbitmq/auth/vhost
+    auth_http.resource_path = http://localhost:3000/rabbitmq/auth/resource
+    auth_http.topic_path = http://localhost:3000/rabbitmq/auth/topic
+  </pre>
+  <p>
+    Assuming that your application and RabbitMQ instance are on the same
+    machine, and that your application is exposed on port 3000 everything
+    should just work™️.
+  </p>
+  <p>
+    If it doesn't work try restarting RabbitMQ and your application.
+  </p>
+</details>
+
+<details>
+  <summary>Why does this library depend on Roda?</summary>
+  <p>
+    <a href="https://github.com/jeremyevans/roda">Roda</a> is, in my opinion, a lightweight framework around Rack.
+    I prefer it over raw Rack - since, in my opinion, the overhead of it is
+    negligible over raw Rack I use it as a more ergonomic interface to create
+    Rack applications.
+  </p>
+</details>
 
 ## Development
 
