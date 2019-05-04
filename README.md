@@ -33,9 +33,10 @@ endpoints and respond with correctly formated responses.
     5. [Default configuration](#default-configuration)
 2. [Installation](#installation)
 3. [FAQ](#faq)
-4. [Development](#development)
-5. [Contributing](#contributing)
-6. [License](#license)
+4. [Change log](#change-log)
+5. [Development](#development)
+6. [Contributing](#contributing)
+7. [License](#license)
 
 ## Usage
 
@@ -486,6 +487,13 @@ deny
   </p>
 </details>
 
+## Change log
+
+All changes between versions are logged to the change log available in the
+[CHANGELOG.md file](/CHANGELOG.md).
+
+This project follows the [semantic versioning schema](https://semver.org/).
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies.
@@ -502,7 +510,7 @@ to [rubygems.org](https://rubygems.org).
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at
-https://github.com/monorkin/rabbitmq_http_auth_backend/.
+[https://github.com/monorkin/rabbitmq_http_auth_backend/](https://github.com/monorkin/rabbitmq_http_auth_backend/).
 
 ## License
 
