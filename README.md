@@ -475,6 +475,14 @@ deny
   <p>
     If it doesn't work try restarting RabbitMQ and your application.
   </p>
+  <p>
+    If your application and RabbitMQ instance aren't on the same machine, make
+    sure that the RabbitMQ instance can access your application, the
+    easiest way to do this is to connect to the RabbitMQ server and using
+    `ping <your application URL or IP>` or `curl <your application URL or IP>:<your application port>`.
+    Remember to change the `localhost:3000` in `rabbitmq.conf` to your
+    application's URL or IP.
+  </p>
 </details>
 
 <details>
