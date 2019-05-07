@@ -7,7 +7,7 @@ RSpec.describe RabbitMQHttpAuthBackend::App do
     let(:app) do
       described_class.new(
         RabbitMQHttpAuthBackend::Config.new(:default)
-      ).generate
+      )
     end
 
     describe 'GET /user' do
@@ -97,7 +97,7 @@ RSpec.describe RabbitMQHttpAuthBackend::App do
     let(:app) do
       described_class.new(
         RabbitMQHttpAuthBackend::Config.new(version)
-      ).generate
+      )
     end
 
     describe 'post /se/anvandare' do

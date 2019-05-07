@@ -59,7 +59,7 @@ RSpec.describe RabbitMQHttpAuthBackend do
           .with(version)
           .and_return(config)
         )
-        app = double(:app, generate: nil)
+        app = double(:app)
         allow(RabbitMQHttpAuthBackend::App).to(
           receive(:new)
           .and_return(app)
@@ -82,7 +82,7 @@ RSpec.describe RabbitMQHttpAuthBackend do
           .with(version)
           .and_return(config)
         )
-        app = double(:app, generate: nil)
+        app = double(:app)
         allow(RabbitMQHttpAuthBackend::App).to(
           receive(:new)
           .and_return(app)

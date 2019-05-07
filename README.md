@@ -485,16 +485,6 @@ deny
   </p>
 </details>
 
-<details>
-  <summary>Why does this library depend on Roda?</summary>
-  <p>
-    <a href="https://github.com/jeremyevans/roda">Roda</a> is, in my opinion, a lightweight framework around Rack.
-    I prefer it over raw Rack - since, in my opinion, the overhead of it is
-    negligible over raw Rack I use it as a more ergonomic interface to create
-    Rack applications.
-  </p>
-</details>
-
 ## Change log
 
 All changes between versions are logged to the change log available in the

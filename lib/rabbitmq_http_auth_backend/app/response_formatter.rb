@@ -10,8 +10,10 @@ module RabbitMQHttpAuthBackend
       end
 
       def call
-        action = response[0]
-        tags = response[1]
+        # NOTE: The response is of format [:allow, [:admin, :moderator]]
+        #                                  ^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+        #                                  action  tags
+        action, tags = response
 
         if action == :allow && tags
           "#{action} #{tags.join(' ')}"

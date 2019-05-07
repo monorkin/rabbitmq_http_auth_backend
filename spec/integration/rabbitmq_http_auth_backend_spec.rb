@@ -54,9 +54,10 @@ RSpec.describe RabbitMQHttpAuthBackend do
   end
 
   describe '#app' do
-    it 'builds a Roda app' do
+    it 'builds a Rack app' do
       app = described_class.app
-      expect(app.ancestors).to include(Roda)
+      expect(app).to respond_to(:call)
+      expect(app.method(:call).arity).to eq(1)
     end
   end
 end

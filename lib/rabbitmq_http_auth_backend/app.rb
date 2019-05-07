@@ -1,5 +1,3 @@
-require 'roda'
-
 module RabbitMQHttpAuthBackend
   class App
     RESOURCES = %i[user vhost resource topic].freeze
@@ -11,27 +9,21 @@ module RabbitMQHttpAuthBackend
       @config = config
     end
 
-    def generate
-      # NOTE: config has to be bound to the local scope as a variable to be
-      # accessible from within the class that is being built
-      config = self.config
+    def call(env)
+      request = Rack::Request.new(env)
 
-      Class.new(Roda) do
-        route do |r|
-          RESOURCES.map do |resource|
-            r.on(config.fetch(resource, :path)) do
-              r.is do
-                r.public_send(config.http_method) do
-                  result =
-                    RabbitMQHttpAuthBackend::Resolver
-                    .call(r.params, config.fetch(resource, :resolver))
-                  ResponseFormatter.call(result)
-                end
-              end
-            end
-          end.last
+      RESOURCES.each do |resource|
+        if request.path_info == "/#{config.fetch(resource, :path)}" &&
+           request.request_method == config.http_method.to_s.upcase
+          result =
+            RabbitMQHttpAuthBackend::Resolver
+            .call(request.params, config.fetch(resource, :resolver))
+          response = ResponseFormatter.call(result)
+          return [200, {}, [response]]
         end
-      end.freeze.app
+      end
+
+      [404, {}, ['']]
     end
   end
 end

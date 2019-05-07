@@ -14,7 +14,7 @@ module RabbitMQHttpAuthBackend
   def self.app(version = nil)
     version ||= RabbitMQHttpAuthBackend::Config.default_configuration_key
     config = RabbitMQHttpAuthBackend::Config.new(version)
-    RabbitMQHttpAuthBackend::App.new(config).generate
+    RabbitMQHttpAuthBackend::App.new(config)
   end
 end
 
